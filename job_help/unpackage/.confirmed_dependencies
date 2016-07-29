@@ -1,0 +1,82 @@
+{
+	"index.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"reg.html",
+			"js/login.js",
+			"index.html",
+			"fonts/mui.ttf"
+		],
+		"refer": [
+			"reg.html",
+			"index.html",
+			"main.html"
+		]
+	},
+	"reg.html": {
+		"resources": [
+			"js/app.js",
+			"fonts/mui.ttf",
+			"js/login.js",
+			"css/style.css",
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"index.html"
+		],
+		"refer": [
+			"index.html"
+		]
+	},
+	"main.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"fonts/mui.ttf",
+			"page4.html",
+			"css/iconfont.css",
+			"fonts/iconfont.ttf",
+			"js/jquery-3.1.0.min.js",
+			"page3.html"
+		],
+		"refer": [
+			"page3.html",
+			"page2.html",
+			"page4.html",
+			"page1.html",
+			"addStudent.html"
+		]
+	},
+	"page4.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"images/qq.png",
+			"js/jquery-3.1.0.min.js",
+			"js/app.js",
+			"js/login.js"
+		],
+		"refer": [
+			"index.html"
+		]
+	},
+	"addStudent.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/angular.min.js",
+			"js/login.js"
+		]
+	},
+	"page3.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/mui.min.css"
+		],
+		"refer": [
+			"index.html"
+		]
+	}
+}

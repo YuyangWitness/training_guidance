@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/iconfont.css" />
+		<script type="text/javascript" src="js/jquery-3.1.0.min.js" ></script>
+
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">学生管理</h1>
+			<span class="mui-icon mui-icon-plusempty" id="addStudent"></span>
+		</header>
+
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item mui-active" href="page4.html">
+				<span class="mui-icon mui-icon-person"></span>
+				<span class="mui-tab-label">学生管理</span>
+			</a>
+
+			<a class="mui-tab-item" id="page1" href="page1.html">
+				<span class="mui-icon iconfont icon-peixun"></span>
+				<span class="mui-tab-label">培训管理</span>
+			</a>
+
+			<a class="mui-tab-item" href="page2.html">
+				<span class="mui-icon mui-icon-compose"></span>
+				<span class="mui-tab-label">报告管理</span>
+			</a>
+
+			<a class="mui-tab-item" href="page3.html">
+				<span class="mui-icon iconfont icon-geren"></span>
+				<span class="mui-tab-label">个人设置</span>
+			</a>
+		</nav>
+	</body>
+	<script type="text/javascript" charset="utf-8">
+		mui.init();
+		//设置默认打开首页显示的子页序号；
+		var Index = 0;
+		//把子页的路径写在数组里面
+		var subpages = ['page4.html', 'page1.html', 'page2.html', 'page3.html'];
+
+		//所有的plus-*方法写在mui.plusReady中或者后面。
+		/*mui.plusReady(function() {
+		    //获取当前页面所属的Webview窗口对象
+		    var self = plus.webview.currentWebview();
+		    for (var i = 0; i < 4; i++) {
+		        //创建webview子页
+		        var sub = plus.webview.create(
+		            subpages[i], //子页url
+		            subpages[i], //子页id
+		            {
+		                top: '45px',//设置距离顶部的距离
+		                bottom: '50px'//设置距离底部的距离
+		            }
+		        );
+		        //如不是我们设置的默认的子页则隐藏，否则添加到窗口中
+		        if (i != Index) {
+		            sub.hide();
+		        }
+		        //将webview对象填充到窗口
+		        self.append(sub);
+		    }
+		});*/
+		mui.plusReady(function() {
+			var self = plus.webview.currentWebview();
+			for(var i = 0; i < 4; i++) {
+				var webview = plus.webview.create(subpages[i], subpages[i], {
+					top: '45px',
+					bottom: '51px'
+				});
+                 
+				if(i != Index) {
+					webview.hide();
+				}
+				 self.append(webview);
+			}
+			
+			mui.oldBack = mui.back;
+					var backButtonPress = 0;
+					mui.back = function(event) {
+						backButtonPress++;
+						if (backButtonPress > 1) {
+							plus.runtime.quit();
+						} else {
+							plus.nativeUI.toast('再按一次退出应用');
+						}
+						setTimeout(function() {
+							backButtonPress = 0;
+						}, 1000);
+						return false;
+					};
+		});
+
+		//当前激活的选项卡和标题 
+		var activeTab = subpages[Index],
+			title = document.querySelector(".mui-title");
+		mui('.mui-bar-tab').on('tap', 'a', function(e) {
+			//获取点击页面的id
+			var clickTab = this.getAttribute('href');
+			if(clickTab == activeTab){
+				return ; 
+			}
+				if(clickTab != 'page4.html'){
+				$('#addStudent').hide();
+			}else{
+				$('#addStudent').show();
+				
+			}
+			//更换标题
+			title.innerHTML = this.querySelector('.mui-tab-label').innerHTML;
+			//更换选项卡
+			plus.webview.show(clickTab);
+			//隐藏当前选项卡
+			plus.webview.hide(activeTab);
+			//更换当前激活选项卡
+			activeTab = clickTab;
+
+		});
+        var addstudent = document.getElementById('addStudent');
+    addstudent.addEventListener('tap',function(e){
+    	    mui.openWindow({
+    	    	url:'addStudent.html',
+    	    	id:'addStudent'
+    	    })
+    });
+		/*
+		  	
+		  	var activeview = subpages[0];
+		  	//点击选项卡事件
+		  	mui('.mui-bar-tab').on('tap','a',function(){
+		  		var nowview = this.getAttribute('href')
+		  		if(activeview==nowview){
+		  			return;
+		  		}
+		  		
+		  		if(mui.os.ios||show1[nowview]){
+		  			plus.webview.show(nowview);
+		  		}
+		  		plus.webview.hide(activeview);
+		  		activeview = nowview;
+		  	})*/
+	</script>
+
+</html>
