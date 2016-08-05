@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuyang.repository.studentMapper" >
+<select id="SelectStu" resultType="com.yuyang.entity.student" parameterType="java.lang.String">
+    SELECT * FROM student WHERE student.director = #{directorname}
+</select>
+
+    <select id="seletstuByid" resultType="com.yuyang.entity.student" parameterType="java.lang.String">
+        SELECT * FROM student WHERE student.id = #{id}
+    </select>
+
+    <update id="updatestuByid" parameterType="com.yuyang.entity.student">
+        UPDATE student s SET s.username = #{studentVal.username},s.name = #{studentVal.name},s.department = #{studentVal.department},s.picpath = #{studentVal.picpath}
+        WHERE s.id = #{studentVal.id}
+    </update>
+
+    <select id="selestuNotusername" parameterType="com.yuyang.entity.student" resultType="com.yuyang.entity.student">
+        SELECT * FROM student s1 WHERE s1.username = #{studentVal.username}
+        AND s1.id NOT IN (SELECT s2.id FROM student s2 WHERE s2.id = #{studentVal.id})
+    </select>
+
+    <insert id="insertStudent" parameterType="com.yuyang.entity.student" >
+        INSERT INTO student(id,username,name,department,director,picpath)
+        VALUES (#{studentVal.id},#{studentVal.username},#{studentVal.name},#{studentVal.department},#{studentVal.director},#{studentVal.picpath})
+    </insert>
+
+    <select id="selectStuByusername" parameterType="java.lang.String" resultType="com.yuyang.entity.student">
+        SELECT * FROM student s WHERE  s.username = #{username}
+    </select>
+</mapper>
