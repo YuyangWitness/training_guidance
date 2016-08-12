@@ -6,34 +6,91 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
-		<script type="text/javascript" src="js/jquery-3.1.0.min.js" ></script>
-	    <script type="text/javascript" src="js/app.js" ></script>
-	    <script type="text/javascript" src="js/login.js" ></script>
+		<script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
+		<script type="text/javascript" src="js/app.js"></script>
+		<script type="text/javascript" src="js/login.js"></script>
 	</head>
 
 	<body>
 		<script src="js/mui.min.js"></script>
 		<script type="text/javascript">
-			mui.init()
+			mui.init({
+				pullRefresh: {
+					container: "#refreshContainer",
+					down: {
+						heigh: 50, //默认50，下来刷新拖动距离
+						auto: true, //自动下拉刷新一次，默认false
+						contentdown: '下拉可以刷新',
+						contentover: '释放刷新',
+						contentrefresh: '正在刷新',
+						callback: function() {
+
+							var user = getstate();
+							removeAllItem();
+
+							selectStu(user.account);
+							mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+						}
+					}
+				}
+			});
 		</script>
-		
-		<div class="mui-content">
-		 <ul class="mui-table-view" id="StuList">
-	
-</ul>
+
+		<div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<ul class="mui-table-view" id="StuList">
+				</ul>
+			</div>
 		</div>
+		
 	</body>
-<script>
-   mui.plusReady(function(){
-   	var database = openDatabase('train','1.0','培训数据库',1024*1024,function(){});
-    	    if(!database){
-    	    	alert('数据库创建失败，添加失败')
-    	    }
-    	    var user = getstate();
-    	    selectStu(database,user.account);
-   });
-	 
-    	    
-    	    
-</script>
+	<script>
+		window.addEventListener('AddNew', function() {
+			
+			plus.webview.getWebviewById('page4.html').reload();
+
+		});
+		var user = getstate();
+		mui.plusReady(function() {
+
+			selectStu(user.account);
+			mui('.mui-table-view').on('tap', '.mui-slider-handle', function(e) {
+				var id = $(this).children('a')[0].getAttribute('href')
+				selectStuByid(id);
+
+           
+            });
+            
+            mui('.mui-table-view').on('tap', '.mui-btn', function(e) {      
+            		var id = $(this).parent().children('a')[0].getAttribute('href');
+            		
+            		var url = geturl()+"student/deleteStu";
+				mui.ajax(url, {
+					data: {
+						id: id
+					},
+					dataType: 'json', //服务器返回json格式数据
+					type: 'post', //HTTP请求类型
+					success: function(data) {
+						if(data == "1") {
+							$(this).remove(".mui-table-view-cell");
+							plus.webview.getWebviewById('page4.html').reload();
+						} else {
+							plus.nativeUI.toast("删除失败");
+						}
+
+					},
+					error: function(xhr, type, errorThrown) {
+						//异常处理；
+						console.log(type);
+					}
+				});
+		});
+		
+			});
+
+		
+			
+	</script>
+
 </html>

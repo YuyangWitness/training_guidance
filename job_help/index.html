@@ -7,14 +7,21 @@
 		<title></title>
 		<script src="js/mui.min.js"></script>
 		<link href="css/mui.min.css" rel="stylesheet" />
-		<script type="text/javascript" src="js/login.js" ></script>
+		<script type="text/javascript" src="js/login.js"></script>
+		<script type="text/javascript" src="js/app.js" ></script>
+		<script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
+
 		<style>
-			#login {
+			#Tealogin {
+				padding: 10px;
+			}
+			
+			#Stulogin {
 				padding: 10px;
 			}
 			
 			.mui-input-group {
-				margin-top: 5%;
+				margin-top: 1%;
 			}
 			
 			.mui-input-group label {
@@ -24,8 +31,21 @@
 			.mui-input-group label~input {
 				width: 78%;
 			}
-			#link{width: 70%; margin: 10% auto;}
-			#link {text-align: center;}
+			
+			#link {
+				width: 70%;
+				margin: 10% auto;
+			}
+			
+			#link {
+				text-align: center;
+			}
+			
+			#loginWho {
+				height: 40px;
+				width: 50%;
+				margin: 5px auto;
+			}
 		</style>
 	</head>
 
@@ -34,98 +54,151 @@
 			<h1 class="mui-title">登陆</h1>
 		</header>
 		<div class="mui-content">
+			<div id="loginWho">
+				<button type="button" class="mui-btn" id="Teacher">教师登录</button>
+				<button type="button" class="mui-btn" id="student">学生登录</button>
 
-			<form id="loginform" class="mui-input-group">
-				<div class="mui-input-row">
-					<label>账号</label>
-					<input type="text" id="account" class="mui-input-clear mui-input" placeholder="请输入密码">
-				</div>
+			</div>
 
-				<div class="mui-input-row">
-					<label>密码</label>
-					<input type="password" id="password" class="mui-input-clear mui-input" placeholder="请输入密码">
-				</div>
-			</form>
-			<form>
-				<div class="mui-content-padded">
-					<button class="mui-btn mui-btn-primary mui-btn-block" id="login">登陆</button>
-				    <div id="link"><label><a href="reg.html">注册账号</a></label></div>
-				</div>
-			</form>
-			
-			
+			<div id="TeachLogin">
+				<form id="loginform" class="mui-input-group">
+					<div class="mui-input-row">
+						<label>账号</label>
+						<input type="text" id="Teacheraccount" class="mui-input-clear mui-input" placeholder="请输入密码">
+					</div>
+
+					<div class="mui-input-row">
+						<label>密码</label>
+						<input type="password" id="Teacherpassword" class="mui-input-clear mui-input" placeholder="请输入密码">
+					</div>
+				</form>
+				<form>
+					<div class="mui-content-padded">
+						<button class="mui-btn mui-btn-primary mui-btn-block" id="Tealogin">登陆</button>
+						<div id="link"><label><a href="reg.html">注册账号</a></label></div>
+					</div>
+				</form>
+			</div>
+
+			<div id="StuLogin" style="display: none;">
+				<form id="loginform" class="mui-input-group">
+					<div class="mui-input-row">
+						<label>账号</label>
+						<input type="text" id="Studentaccount" class="mui-input-clear mui-input" placeholder="请输入密码">
+					</div>
+
+					<div class="mui-input-row">
+						<label>密码</label>
+						<input type="password" id="Studentpassword" class="mui-input-clear mui-input" placeholder="请输入密码">
+					</div>
+				</form>
+				<form>
+					<div class="mui-content-padded">
+						<button class="mui-btn mui-btn-primary mui-btn-block" id="Stulogin">登陆</button>
+					</div>
+				</form>
+			</div>
 		</div>
 	</body>
 	<script>
-	(function($, doc) {
-				$.init({
-					statusBarBackground: '#f7f7f7'
+		(function($, doc) {
+			$.init({
+				statusBarBackground: '#f7f7f7'
+			});
+
+			$.plusReady(function() {
+				plus.screen.lockOrientation("portrait-primary");
+				var state = getstate();
+				var mainPage = $.preload({
+					"id": 'main',
+					"url": 'main.html'
 				});
-		
-		$.plusReady(function(){
-			plus.screen.lockOrientation("portrait-primary");
-			var state = getstate();
-			var mainPage = $.preload({
-						"id": 'main',
-						"url": 'main.html'
-					});
-			var toMain = function() {
-						$.fire(mainPage, 'show', null);
-						setTimeout(function() {
-							$.openWindow({
-								url:'main.html',
-								id: 'main',
-								createNew:false,
-								show: {
-									aniShow: 'pop-in'
-								},
-								waiting: {
-									autoShow: false
-								}
-							});
-						}, 0);
-					};
-					if(state.state){
-						toMain();
-					}
-					// close splash
-					//这个很重要！！因为它让程序自动登录不会在登录页面延迟！！！！！！
+				var toMain = function() {
+					$.fire(mainPage, 'show', null);
 					setTimeout(function() {
-						//关闭 splash
-						plus.navigator.closeSplashscreen();
-					}, 600);
-			var accountBox = document.getElementById('account');
-			var passwordBox = document.getElementById('password');
-			var loginBox = document.getElementById('login');
-			loginBox.addEventListener('tap',function(e){
-			var loginInfo = {
-				account : accountBox.value,
-				password : passwordBox.value
-			}
-			login(loginInfo,function(err){
-				if(err){
-					plus.nativeUI.toast(err);
-					return;
+						$.openWindow({
+							url: 'main.html',
+							id: 'main',
+							createNew: false,
+							show: {
+								aniShow: 'pop-in'
+							},
+							waiting: {
+								autoShow: false
+							}
+						});
+					}, 0);
+				};
+				if(state.state) {
+					toMain();
 				}
-				plus.nativeUI.toast('登录成功');
-				toMain();
-			});
-			});
-			var backButtonPress = 0;
-					$.back = function(event) {
-						backButtonPress++;
-						if (backButtonPress > 1) {
-							plus.runtime.quit();
-						} else {
-							plus.nativeUI.toast('再按一次退出应用');
+				// close splash
+				//这个很重要！！因为它让程序自动登录不会在登录页面延迟！！！！！！
+				setTimeout(function() {
+					//关闭 splash
+					plus.navigator.closeSplashscreen();
+				}, 600);
+				var accountBox = document.getElementById('Teacheraccount');
+				var passwordBox = document.getElementById('Teacherpassword');
+				var loginBox = document.getElementById('Tealogin');
+				loginBox.addEventListener('tap', function(e) {
+					var loginInfo = {
+						account: accountBox.value,
+						password: passwordBox.value
+					}
+					login(loginInfo, function(err) {
+						if(err) {
+							plus.nativeUI.toast(err);
+							return;
 						}
-						setTimeout(function() {
-							backButtonPress = 0;
-						}, 1000);
-						return false;
-					};
-		});
+						plus.nativeUI.toast('登录成功');
+						toMain();
+					});
+				});
+				var backButtonPress = 0;
+				$.back = function(event) {
+					backButtonPress++;
+					if(backButtonPress > 1) {
+						plus.runtime.quit();
+					} else {
+						plus.nativeUI.toast('再按一次退出应用');
+					}
+					setTimeout(function() {
+						backButtonPress = 0;
+					}, 1000);
+					return false;
+				};
+			});
 		}(mui, document));
+		
+		var stulogin = document.getElementById('Stulogin');
+		stulogin.addEventListener('tap',function(e){
+		
+			var stuInfo ={
+				username:$('#Studentaccount').val(),
+				password:$('#Studentpassword').val()
+			}
+			
+    	    //验证用户密码的长度以及正确性
+    	    if(stuInfo.username.length==0||stuInfo.password.length==0){
+    	    	    plus.nativeUI.toast('用户或者密码不能为空');
+    	    }else{
+    	    	    if(stuInfo.username.length<5||stuInfo.password.length<5){
+    	    	    	  plus.nativeUI.toast('用户或者密码字符不能小于5');
+    	    	    }else{
+    	    	    	  seleStuByusername(stuInfo);
+    	    	    }
+    	    }
+    	  
+		});
+		$('#Teacher').click(function() {
+			$('#TeachLogin').show();
+			$('#StuLogin').hide();
+		});
+		$('#student').click(function() {
+			$('#TeachLogin').hide();
+			$('#StuLogin').show();
+		});
 	</script>
 
 </html>

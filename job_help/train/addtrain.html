@@ -1,0 +1,166 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/mui.picker.min.css" />
+		<link rel="stylesheet" href="../css/mui.poppicker.css" />
+		<script type="text/javascript" src="../js/login.js"></script>
+		<script type="text/javascript" src="../js/app.js" ></script>
+		<script type="text/javascript" src="../js/jquery-3.1.0.min.js"></script>
+		<style>
+			.traininput {
+				background: white;
+				width: 65%;
+			}
+			
+			.lableinput {
+				text-align: center;
+				width: 30%;
+			}
+			
+			#content {
+				height: 200px;
+			}
+			
+			.selectdate {
+				padding: 5px;
+				width: 35%;
+				font-size: medium;
+				margin-left: 5%;
+				float: left;
+			}
+			
+			.select {
+				height: 50px;
+				margin-bottom: 5px;
+			}
+			
+			.dateVal {
+				margin-left: 20px;
+				line-height: 30px;
+				float: left;
+			}
+			#addtrain{
+				padding: 10px;
+				width: 60%;
+				margin: 0px auto;
+				margin-bottom: 20px;
+				
+			}
+		</style>
+	</head>
+
+	<body>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init({
+				beforeback: function() {
+					//获得你要前往页面的webview id
+					//var Scanner = plus.webview.getWebviewById('page4.html');
+
+					var wvs = plus.webview.getWebviewById('page1.html');
+					mui.fire(wvs, 'AddNew');
+
+				}
+			});
+		</script>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">添加培训信息</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-input-row" style="margin: 10px;">
+				<label class="lableinput">培训标题</label>
+				<input type="text" id="title" class="mui-input-clear traininput" placeholder="请输入标题" />
+				<label class="lableinput" style="line-height: 200px;">培训内容</label>
+				<textarea class="mui-input-clear" id="content"></textarea>
+			</div>
+
+			<div class="select">
+				<button id='selectdata' data-options='{"type":"date","beginYear":2016,"endYear":2020}' class="btn mui-btn mui-btn-block selectdate">选择起始日期</button>
+				<label id="dataVal" class="dateVal"></label>
+			</div>
+			<div class="select">
+				<button id='selectenddata' data-options='{"type":"date","beginYear":2016,"endYear":2020}' class="btn mui-btn mui-btn-block selectdate">选择结束日期</button>
+				<label id="dataendVal" class="dateVal"></label>
+			</div>
+			<div class="select">
+				<button id='showUserPicker' class="mui-btn mui-btn-block selectdate" type='button'>培训学生选择</button>
+				<label id="studentVal" class="dateVal"></label>
+				<label id="studentId" style="display: none;"></label>
+			</div>
+			
+			<button class="mui-btn mui-btn-blue mui-btn-block" id="addtrain">添加培训信息</button>
+		</div>
+	</body>
+	<script type="text/javascript" src="../js/mui.picker.min.js"></script>
+	<script type="text/javascript" src="../js/mui.poppicker.js"></script>
+	<script>
+		mui.plusReady(function() {
+			$('#selectdata').click(function() {
+				var optionsJson = this.getAttribute('data-options') || '{}';
+				var options = JSON.parse(optionsJson);
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+
+					$('#dataVal').html(rs.text);
+					picker.dispose();
+				}, false);
+			})
+
+			$('#selectenddata').click(function() {
+				var optionsJson = this.getAttribute('data-options') || '{}';
+				var options = JSON.parse(optionsJson);
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+
+					$('#dataendVal').html(rs.text);
+					picker.dispose();
+				}, false);
+			});
+			var userPicker = new mui.PopPicker();
+			 getstudentData(userPicker);
+
+			$('#showUserPicker').click(function() {
+
+				userPicker.show(function(items) {
+					$('#studentVal').html(items[0].text);
+					$('#studentId').html(items[0].value);
+				}, false);
+			});
+			
+			$('#addtrain').click(function(){
+				
+			var title = $('#title').val();
+			var content = $('#content').val();
+			var dataVal = $('#dataVal').text();
+			var dataendVal = $('#dataendVal').text();
+			var studentId = $('#studentId').text();
+			
+			var trainInfo = {
+				title : title,
+				content : content,
+				startDate : dataVal,
+				endDate : dataendVal,
+				student : studentId,
+				director: user.account
+			}
+			addTrain(trainInfo,function(err) {
+						if(err) {
+							plus.nativeUI.toast(err);
+							return;
+						}
+						
+			
+			});
+			
+			});
+			
+		});
+	</script>
+
+</html>

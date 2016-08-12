@@ -2,21 +2,128 @@
 <html>
 
 	<head>
-		<meta charset="UTF-8">
-		<title></title>
+		<meta charset="utf-8">
+		<title>page1</title>
+		<meta http-equiv="Access-Control-Allow-Origin" content="*">
+		<meta http-equiv="content-security-policy">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
+		<script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
+		<script type="text/javascript" src="js/app.js"></script>
+		<script type="text/javascript" src="js/login.js"></script>
+		<script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
+		<script src="js/mui.min.js"></script>
+		<style>
+			#data {
+				margin-left: 50%;
+				font-size: small;
+			}
+			
+			#content {
+				margin: 5%;
+				height: 3em;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			
+			#title {
+				width: 100%;
+				font-size: medium;
+				color: #000000;
+				margin-right: 5%;
+				white-space: nowrap;
+				/*强制不换行*/
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		</style>
+		<script type="text/javascript">
+			mui.init({
+				pullRefresh: {
+					container: "#refreshContainer",
+					down: {
+						heigh: 50, //默认50，下来刷新拖动距离
+						auto: true, //自动下拉刷新一次，默认false
+						contentdown: '下拉可以刷新',
+						contentover: '释放刷新',
+						contentrefresh: '正在刷新',
+						callback: function() {
+
+							var user = getstate();
+							removeAllItem();
+							var user = getstate();
+							seletTrain(user.account);
+
+							mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+						}
+					}
+				}
+			});
+		</script>
 	</head>
 
 	<body>
-		<script src="js/mui.min.js"></script>
-		<script type="text/javascript">
-			mui.init()
-		</script>
-		<div class="mui-content">
-		    <p>this is page1!!!!!!</p>
+		<div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<ul class="mui-table-view" id="TrainList">
+
+				</ul>
+
+			</div>
 		</div>
-		
+
 	</body>
+
+	<script>
+		window.addEventListener('AddNew', function() {
+			plus.webview.getWebviewById('page1.html').reload();
+
+		});
+		mui.plusReady(function() {
+
+			var user = getstate();
+			seletTrain(user.account);
+
+			mui('.mui-table-view').on('tap', '.mui-table-view-cell', function() {
+				var id = $(this).children('lable').text();
+				var modifyWebview = mui.openWindow({
+					url: 'train/modifytrain.html',
+					id: 'modifytrain',
+					extras: {		
+						trainId: id,			
+					}
+				});
+			});
+			
+			mui('.mui-table-view').on('tap','.mui-btn',function(){
+				var id = $(this).parent().children('a')[0].getAttribute('href');
+				var url = geturl()+"train/deleteTrain";
+				mui.ajax(url, {
+					data: {
+						id: id
+					},
+					dataType: 'json', //服务器返回json格式数据
+					type: 'post', //HTTP请求类型
+					success: function(data) {
+						if(data == "1") {
+							$(this).remove(".mui-table-view-cell");
+							plus.webview.getWebviewById('page1.html').reload();
+						} else {
+							plus.nativeUI.toast("删除失败");
+						}
+
+					},
+					error: function(xhr, type, errorThrown) {
+						//异常处理；
+						console.log(type);
+					}
+				});
+			});
+
+
+		});
+	</script>
 
 </html>

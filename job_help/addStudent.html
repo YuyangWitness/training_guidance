@@ -6,140 +6,234 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
-		<script type="text/javascript" src="js/angular.min.js" ></script>
-	    <script type="text/javascript" src="js/login.js" ></script>
+		<script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
+		<script type="text/javascript" src="js/angular.min.js"></script>
+		<script type="text/javascript" src="js/login.js"></script>
 	</head>
-    <style>    	
-			#add {
-				padding: 10px;
-			}
-    </style>
+	<style>
+		#add {
+			padding: 10px;
+		}
+		
+		.dlist {
+			padding: 0px;
+			margin: 1em;
+			background: #fff;
+			border: 1px solid #ddd;
+			-webkit-border-radius: 3px;
+			border-radius: 3px;
+			width: 100px;
+			height: 100px;
+			margin-left: 32%;
+		}
+		
+		.ditem-empty {
+			overflow: hidden;
+			list-style-type: none;
+			font-size: 1em;
+			padding: 1em;
+			vertical-align: middle;
+			text-align: center;
+		}
+		
+		.camera {
+			margin: 0 auto;
+			width: 80%;
+			height: 100%;
+			text-align: center;
+		}
+	</style>
+
 	<body ng-app="app">
 		<script src="js/mui.min.js"></script>
 		<script type="text/javascript">
-			mui.init()
+			mui.init({
+				beforeback: function() {
+					//获得你要前往页面的webview id
+					//var Scanner = plus.webview.getWebviewById('page4.html');
+
+					var wvs = plus.webview.getWebviewById('page4.html');
+					mui.fire(wvs, 'AddNew');
+
+				}
+			});
 		</script>
 		<header class="mui-bar mui-bar-nav">
-		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-		    <h1 class="mui-title">添加学生</h1>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">添加学生</h1>
 		</header>
 		<div class="mui-content" ng-controller="addController">
-		    		<form class="mui-input-group">
-		    			<div class="mui-input-row">
-		    				<label>用户名</label>
-		    				<input type="text" class="mui-input-clear" placeholder="请输入用户名" id="username"/>
-		    			</div>
-		    			<div class="mui-input-row">
-		    				<label>姓名</label>
-		    				<input type="text" class="mui-input-clear" placeholder="请输入姓名" id="name"/>
-		    			</div>
-		    			<div class="mui-input-row">
-		    				<label>部门科室</label>
-		    				<select id='department' ng-model="selected"  ng-options="(m.apartment + '-' + m.department) group by m.apartment for m in model">		    				
-		    				</select>		  
-		    			</div>
-		    			
-		    		</form>
-              <form>
+			<form class="mui-input-group">
+				<div class="mui-input-row">
+					<label>用户名</label>
+					<input type="text" class="mui-input-clear" placeholder="请输入用户名" id="username" />
+				</div>
+				<div class="mui-input-row">
+					<label>姓名</label>
+					<input type="text" class="mui-input-clear" placeholder="请输入姓名" id="name" />
+				</div>
+				<div class="mui-input-row">
+					<label>部门科室</label>
+					<select id='department' ng-model="selected" ng-options="(m.apartment + '-' + m.department) group by m.apartment for m in model">
+					</select>
+				</div>
+
+			</form>
+			<div class="camera">
+				<ul id="history" class="dlist">
+					<li id="empty" class="ditem-empty">无历史记录</li>
+				</ul>
+
+				<button class="mui-btn" id="cmr">拍照</button>
+				<button class="mui-btn" id="gly">相册</button>
+				<!--
+                	<button class="mui-btn" id="addpic">保存图片到本地相册</button>
+                -->
+			</div>
+			<form>
 				<div class="mui-content-padded">
 					<button class="mui-btn mui-btn-primary mui-btn-block" id="add">添加学生</button>
 				</div>
 			</form>
-			
+
 		</div>
 	</body>
-    <script>
-   
-    var app = angular.module('app',[]);
-    app.controller('addController',function($scope){
-    	$scope.selected='';
-    	$scope.model =[{
-    		department:'科室一',
-    		apartment:'应用系统一部'
-    	},{
-    		department:'科室二',
-    		apartment:'应用系统一部'
-    	},{
-    		department:'薪酬室',
-    		apartment:'人力资源部'
-    	},{
-    		department:'员工管理室',
-    		apartment:'人力资源部'
-    	}]
-    });
-     mui.plusReady(function(){
-    function createTable(database){
-    		database.transaction(function(tx){
-    		tx.executeSql(
-    			"create table if not exists student(id TEXT,name TEXT,username TEXT,password TEXT,department TEXT,director TEXT)",
-    			[],
-    			function(tx,result){},
-    			function(tx,error){
-    				alert('创建表格失败');
-    			}
-    		);
-    	});
-    }
-    
-    function insert(database,stu){
-    	database.transaction(function(tx){
-    		tx.executeSql(
-    			"insert into student(id,name,username,password,department,director) values(?,?,?,?,?,?)",
-    			[stu.id,stu.name,stu.username,'1234567',stu.department,stu.director],
-    			function(){
-    				plus.nativeUI.toast('添加成功');
-    			},
-    			function(tx,error){
-    				plus.nativeUI.toast('添加失败');
-    			}
-    	);
-    	});
-    }
-    
-    function selectUser(database,stu){
-    	database.transaction(function(tx){
-    		tx.executeSql(
-    			"select * from student where username = ?",[stu.username],
-    			function(tx,result){
-    				if(result.rows.length==0){
-    					insert(database,stu);
-    					 mui.back();
-    				}else{
-    					alert('用户名已经被注册，请重新填写');
-    				}
-    			},function(){
-    				alert('select is fail')
-    			}
-    		);
-    	});
-    }
-    var add = document.getElementById('add');
-    
-    add.addEventListener('tap',function(){
-    	var director = getstate().account;
-    	var username = document.getElementById('username');
-    var name = document.getElementById('name');
-    var department = document.getElementById('department');
-    var depatVal = department.options[department.options.selectedIndex].innerText;
-    var id = Math.round(Math.random()*1000);
-    var stu = {
-    	    id:id,
-    	    username:username.value,
-    	    name:name.value,
-    	    department:depatVal,
-    	    director:director
-    }
-    	    var database = openDatabase('train','1.0','培训数据库',1024*1024,function(){});
-    	    if(!database){
-    	    	alert('数据库创建失败，添加失败')
-    	    }
-    	    createTable(database);
-    	    selectUser(database,stu);
-    	    
-    	  	
-    	
-    	    
-    });
-});    
-    </script>
+	<script>
+		var app = angular.module('app', []);
+		app.controller('addController', function($scope) {
+			$scope.selected = '';
+			$scope.model = [{
+				department: '科室一',
+				apartment: '应用系统一部'
+			}, {
+				department: '科室二',
+				apartment: '应用系统一部'
+			}, {
+				department: '薪酬室',
+				apartment: '人力资源部'
+			}, {
+				department: '员工管理室',
+				apartment: '人力资源部'
+			}]
+		});
+		mui.plusReady(function() {
+
+			var cam = plus.camera.getCamera();
+			var res = cam.supportedImageResolutions[0];
+			var fmt = cam.supportedImageFormats[0];
+			var cmr = document.getElementById('cmr');
+			var picpath = null;
+			cmr.addEventListener('tap', function(e) {
+
+					cam.captureImage(function(path) {
+
+						plus.io.resolveLocalFileSystemURL(path, function(entry) {
+							entry.file(function(file) {
+								var fileReader = new plus.io.FileReader();
+								picpath = file.fullPath;
+								$("#history").css({
+									"background-image": "url(" + file.fullPath + ")",
+									"background-size": "cover"
+								});
+								$('#empty').remove();
+
+								plus.gallery.save(picpath, function() {
+									plus.nativeUI.toast("成功保存图片");
+								}, function() {
+									plus.nativeUI.toast("失败保存图片");
+								});
+
+							});
+						}, function(e) {
+							alert("Resolve file URL failed: " + e.message);
+						});
+
+					}, function(e) {
+						outLine("读取拍照文件错误：" + e.message);
+					});
+
+				},
+				function(error) {
+					alert("Capture image failed: " + error.message);
+				}, {
+					resolution: res,
+					format: fmt
+				}
+			);
+
+			var gly = document.getElementById('gly');
+			gly.addEventListener('tap', function() {
+				plus.gallery.pick(function(path) {
+					plus.io.resolveLocalFileSystemURL(path, function(entry) {
+						entry.file(function(file) {
+							var fileReader = new plus.io.FileReader();
+							picpath = file.fullPath;
+							$("#history").css({
+								"background-image": "url(" + file.fullPath + ")",
+								"background-size": "cover"
+							});
+							$('#empty').remove();
+
+						});
+					}, function(e) {
+						alert("Resolve file URL failed: " + e.message);
+					});
+
+				}, function(e) {
+					console.log("取消选择图片");
+				}, {
+					filter: "image"
+				});
+			});
+
+			var add = document.getElementById('add');
+
+			add.addEventListener('tap', function() {
+				var director = getstate().account;
+				var username = document.getElementById('username');
+				var name = document.getElementById('name');
+				var department = document.getElementById('department');
+				var depatVal = department.options[department.options.selectedIndex].innerText;
+				var stu = {
+					username: username.value,
+					name: name.value,
+					department: depatVal,
+					director: director,
+					picpath: picpath
+				}
+
+				if(stu.username.length == 0) {
+					plus.nativeUI.toast('用户或者密码不能为空');
+				} else {
+					if(stu.username.leng < 5) {
+						plus.nativeUI.toast('用户名字符不能超过5个');
+
+					} else {
+						var url = geturl()+"student/insertStu";
+						mui.ajax(url, {
+							data: stu,
+							dataType: 'json',
+							type: 'post',
+							success: function(data) {
+								if(data == "1") {
+									mui.back();
+								} else {
+									plus.nativeUI.toast('用户名已被注册');
+								}
+
+							},
+							error: function(xhr, type, errorThrown) {
+								//异常处理；
+								console.log(type);
+							}
+						});
+
+					}
+				}
+
+			});
+
+		});
+	</script>
+
 </html>

@@ -73,6 +73,9 @@
 		"Zip": {
 			"description": "文件压缩与解压缩"
 		},
+        "Camera": {
+		"description": "摄像头"
+	},
 
 
 
@@ -185,7 +188,9 @@
 					"reg.html",
 					"js/login.js",
 					"index.html",
-					"fonts/mui.ttf"
+					"fonts/mui.ttf",
+					"js/jquery-3.1.0.min.js",
+					"js/app.js"
 				],
 				"refer": [
 					"main.html"
@@ -220,7 +225,8 @@
 				"refer": [
 					"page2.html",
 					"page1.html",
-					"addStudent.html"
+					"addStudent.html",
+					"train/addtrain.html"
 				],
 				"priority": 0
 			},
@@ -234,7 +240,8 @@
 					"js/login.js"
 				],
 				"refer": [
-					"index.html"
+					"index.html",
+					"modifyStudent.html"
 				],
 				"priority": 0
 			},
@@ -244,7 +251,9 @@
 					"fonts/mui.ttf",
 					"css/mui.min.css",
 					"js/angular.min.js",
-					"js/login.js"
+					"js/login.js",
+					"images/qq.png",
+					"js/jquery-3.1.0.min.js"
 				],
 				"refer": [],
 				"priority": 0
@@ -257,6 +266,65 @@
 				"refer": [
 					"index.html"
 				],
+				"priority": 0
+			},
+			"modifyStudent.html": {
+				"resources": [
+					"fonts/mui.ttf",
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"js/app.js",
+					"js/angular.min.js",
+					"js/jquery-3.1.0.min.js"
+				],
+				"refer": [
+					"page4.html"
+				],
+				"priority": 0
+			},
+			"page1.html": {
+				"resources": [
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"js/jquery-3.1.0.min.js",
+					"js/app.js",
+					"js/login.js"
+				],
+				"refer": [
+					"train/modifytrain.html"
+				],
+				"priority": 0
+			},
+			"train/addtrain.html": {
+				"resources": [
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/mui.picker.min.css",
+					"js/mui.picker.min.js",
+					"js/jquery-3.1.0.min.js",
+					"css/mui.poppicker.css",
+					"js/mui.poppicker.js",
+					"js/login.js",
+					"js/app.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"train/modifytrain.html": {
+				"resources": [
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/jquery-3.1.0.min.js",
+					"js/app.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"js/login.js"
+				],
+				"refer": [],
 				"priority": 0
 			}
 		},

@@ -16,6 +16,7 @@
 		<header class="mui-bar mui-bar-nav">
 			<h1 class="mui-title">学生管理</h1>
 			<span class="mui-icon mui-icon-plusempty" id="addStudent"></span>
+			<span class="mui-icon mui-icon-plusempty" id="addTrain" style="display: none;"></span>
 		</header>
 
 		<nav class="mui-bar mui-bar-tab">
@@ -114,6 +115,11 @@
 				$('#addStudent').show();
 				
 			}
+			if(clickTab != 'page1.html'){
+				$('#addTrain').hide();
+			}else{
+				$('#addTrain').show();
+			}
 			//更换标题
 			title.innerHTML = this.querySelector('.mui-tab-label').innerHTML;
 			//更换选项卡
@@ -130,6 +136,14 @@
     	    	url:'addStudent.html',
     	    	id:'addStudent'
     	    })
+    });
+    
+    var addTrain = document.getElementById('addTrain');
+    addTrain.addEventListener('tap',function(){
+    	 mui.openWindow({
+    	    	url:'train/addtrain.html',
+    	    	id:'addtrain'
+    	   });
     });
 		/*
 		  	
