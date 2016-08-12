@@ -22,4 +22,6 @@ public  interface  studentMapper {
 
     List<student> selectStuByusername(@Param("username")String username);
 
+    void deleteStu(@Param(value = "id")String id);
+
 }

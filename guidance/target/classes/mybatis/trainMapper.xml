@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuyang.repository.trainMapper" >
+    <resultMap id="resultByid" type="com.yuyang.entity.trainVal">
+        <result column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="name" property="studentVal"/>
+        <result column="content" property="content"/>
+        <result column="startDate" property="startDate"/>
+        <result column="endDate" property="endDate"/>
+    </resultMap>
+    <select id="selectTrain" parameterType="java.lang.String" resultMap="resultByid">
+     SELECT * FROM train t LEFT JOIN student s ON t.student = s.id WHERE t.director = #{director}
+    </select>
+
+    <insert id="insertTrain" parameterType="com.yuyang.entity.Train">
+     INSERT INTO train(id,title,content,director,student,startDate,endDate)
+     VALUES (#{trainVal.id},#{trainVal.title},#{trainVal.content},#{trainVal.director},#{trainVal.student},#{trainVal.startDate},#{trainVal.endDate})
+    </insert>
+
+    <update id="updateTrain" parameterType="com.yuyang.entity.Train">
+        UPDATE train t SET t.title = #{trainVal.title},t.content = #{trainVal.content},
+        t.startDate = #{trainVal.startDate},t.student = #{trainVal.student},
+        t.endDate = #{trainVal.endDate}
+        WHERE t.id = #{trainVal.id}
+    </update>
+
+
+    <select id="selectTrainByid" parameterType="java.lang.String" resultMap="resultByid">
+        SELECT * FROM  train t left JOIN student s ON s.id = t.student WHERE t.id = #{id}
+    </select>
+
+    <delete id="deleteTrain" parameterType="java.lang.String">
+        DELETE FROM train WHERE id = #{id}
+    </delete>
+ </mapper>

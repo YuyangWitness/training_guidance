@@ -45,4 +45,8 @@ public class studentServiceImp implements studentService {
     public List<student> selectStuByusername(String username) {
         return studentmapper.selectStuByusername(username);
     }
+
+    public void deleteStu(String id) {
+        studentmapper.deleteStu(id);
+    }
 }

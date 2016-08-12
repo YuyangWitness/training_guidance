@@ -23,5 +23,6 @@ public interface studentService {
 
     List<student> selectStuByusername(String username);
 
+    void deleteStu(String id);
 
 }

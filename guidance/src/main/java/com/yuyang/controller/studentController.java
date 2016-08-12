@@ -1,10 +1,12 @@
 package com.yuyang.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.yuyang.Common.UUIDGeneratorUtils;
 import com.yuyang.entity.student;
 import com.yuyang.service.studentService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -66,5 +68,37 @@ public class studentController {
         }else{
             return "0";
         }
+    }
+
+    @RequestMapping(value = "deleteStu")
+    @ResponseBody
+    public String deleteStu(@RequestParam(value = "id")String id){
+        if (StringUtils.isNotEmpty(id)){
+            studentservice.deleteStu(id);
+            return "1";
+        }else{
+            return "0";
+        }
+    }
+
+    @RequestMapping(value = "selectStuforTrain")
+    @ResponseBody
+    public JSONArray getStuForTrain(@RequestParam(value = "director")String director){
+
+      List<student> students =  studentservice.SelectStu(director);
+
+        JSONArray jsonArray = new JSONArray();
+
+        for (student s : students){
+            JSONObject json = new JSONObject();
+             json.put("value",s.getId());
+            json.put("text",s.getName());
+
+            jsonArray.add(json);
+        }
+
+        System.out.println(jsonArray.toString());
+
+        return jsonArray;
     }
 }

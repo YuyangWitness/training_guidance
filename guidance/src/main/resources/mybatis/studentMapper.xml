@@ -27,4 +27,8 @@
     <select id="selectStuByusername" parameterType="java.lang.String" resultType="com.yuyang.entity.student">
         SELECT * FROM student s WHERE  s.username = #{username}
     </select>
+
+    <delete id="deleteStu" parameterType="java.lang.String">
+        DELETE FROM student WHERE id = #{id}
+    </delete>
 </mapper>
